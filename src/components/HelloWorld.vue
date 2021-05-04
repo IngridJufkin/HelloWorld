@@ -42,7 +42,7 @@
     <div class="row mt-5">
       <div class="col text-right">
         <button
-        @click="dateformat()"
+        @click="getAndFormatDate()"
         class="bg-green-400 px-4 py-2 rounded">
         Add date
         </button>
@@ -93,7 +93,7 @@ export default {
         year: null,
         month: null,
         day: null,
-        date: null
+        date: null,
       }
 
     }
@@ -104,19 +104,8 @@ export default {
     msg: String
   },
 
-  computed: {
-    datedata() {
-      return dateformat(
-        this.input.year,
-        this.input.month,
-        this.input.day,
-        this.input.date
-      )
-    },
-  },
-
   methods: {
-    dateformat() {
+    getAndFormatDate() {
     let day = this.input.day;
     let month = this.input.month;
     let year = this.input.year;
@@ -133,29 +122,26 @@ export default {
     }
     this.input.date = date
   console.log(date)
-      }
-    },
-  
-mounted() {
-  let date = this.input.date
-  console.log("LOGIN " + date)
 
-    axios
-      //.get(`https://en.wikipedia.org/api/rest_v1/feed/featured/${this.input.date}`)
-      .get(`https://en.wikipedia.org/api/rest_v1/feed/featured/2021/04/30`)
+  axios
+      .get(`https://en.wikipedia.org/api/rest_v1/feed/featured/${this.input.date}`)
+      //.get(`https://en.wikipedia.org/api/rest_v1/feed/featured/2021/04/30`)
       .then(response => {
         console.log (response.data)
         this.items = response.data.mostread.articles
          this.thumbnail = response.data.mostread.articles.thumbnail
-         console.log("olen siin" + this.input.date)
+         console.log("olen siin" + this.input.date),
+       
       })
       .catch(error => {
         console.log(error)
         this.errored = true
       })
       .finally(() => this.loading = false)
-  }
+      },
+
  }
+}
 
 </script>
 
